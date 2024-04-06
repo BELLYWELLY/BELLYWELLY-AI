@@ -21,8 +21,8 @@ async def detect_objects(file: UploadFile = File(...)):
         buffer.write(await file.read())
 
     # YOLO 모델 초기화
-    model = YOLO('./fastapi/runs/detect/train/weights/best.pt')
-    results = model.predict(file_path, save=True, imgsz=320, conf=0.5)
+    model = YOLO('./fastapi/runs/detect/train/weights/best2.pt')
+    results = model.predict(file_path, save=True, imgsz=640, conf=0.3)
 
     # 객체 인식 결과를 리스트로 저장
     output_labels = [model.names.get(box.cls.item()) for box in results[0].boxes]
