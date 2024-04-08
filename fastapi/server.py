@@ -27,7 +27,7 @@ async def detect_objects(request: Request):
             f.write(response.content)
 
         # YOLO 모델 초기화
-        model = YOLO('./runs/detect/train/weights/bestfood.pt')
+        model = YOLO('./demobest.pt')
         results = model.predict(file_path, save=True, imgsz=640, conf=0.3)
 
         # 객체 인식 결과를 리스트로 저장
