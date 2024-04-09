@@ -30,10 +30,15 @@ async def detect_objects(request: Request):
         model = YOLO('./demobest.pt')
         results = model.predict(file_path, save=True, imgsz=640, conf=0.3)
 
-        # 객체 인식 결과를 리스트로 저장
-        output_labels = [model.names.get(box.cls.item()) for box in results[0].boxes]
+        # 객체 인식 결과 중 중복은 제거하고 유니크한 결과만 남기도록 코드 수정
+        # output_labels = [model.names.get(box.cls.item()) for box in results[0].boxes]
+        unique_labels = []
+        for box in results[0].boxes:
+            label = model.names.get(box.cls.item())
+            if label not in unique_labels:
+                unique_labels.append(label)
 
-        return JSONResponse(content={"labels": output_labels}, status_code=200)
+        return JSONResponse(content={"labels": unique_labels}, status_code=200)
 
     except Exception as e:
         # 오류 발생시 예외 처리
