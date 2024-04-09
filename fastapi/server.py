@@ -12,7 +12,7 @@ async def detect_objects(request: Request):
     try:
         # 요청 바디 파싱
         body = await request.json()
-        image_url = body.get("image_url")
+        image_url = body.get("imageUrl") # 카멜케이스로 수정
 
         # 이미지를 다운로드하여 저장할 디렉토리 생성
         os.makedirs('./input_dir', exist_ok=True)
