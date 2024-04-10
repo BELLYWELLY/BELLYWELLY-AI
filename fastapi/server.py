@@ -1,11 +1,21 @@
 from fastapi import FastAPI, HTTPException, UploadFile, File, Body, Request 
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from ultralytics import YOLO
 from werkzeug.utils import secure_filename
+
 import os
 import requests
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 모든 출처 허용
+    allow_credentials=True,
+    allow_methods=["*"],  # 모든 HTTP 메소드 허용
+    allow_headers=["*"],  # 모든 HTTP 헤더 허용
+)
 
 @app.post("/detection")
 async def detect_objects(request: Request):
