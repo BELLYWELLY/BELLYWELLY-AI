@@ -10,6 +10,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Access to OpenAI
+        run: |
+          echo "OPENAI_KEY=$OPENAI_KEY" >> .env
+        env: 
+          OPENAI_KEY: ${{secrets.OPENAI_KEY}}
+
       - name: Set up docker buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
