@@ -12,12 +12,6 @@ jobs:
 
       - name: Access to OpenAI
         run: |
-          echo "OPENAI_KEY=$OPENAI_KEY" >> .env
-        env: 
-          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
-
-      - name: Access to OpenAI
-        run: |
           cd ./fastapi
           touch ./.env
           echo "${{ secrets.OPENAI_KEY }}" > ./.env   
