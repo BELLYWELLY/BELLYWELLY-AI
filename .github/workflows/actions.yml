@@ -16,6 +16,12 @@ jobs:
         env: 
           OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
 
+      - name: Access to OpenAI
+        run: |
+          cd ./fastapi
+          touch ./.env
+          echo "${{ secrets.OPENAI_KEY }}" > ./.env   
+
       - name: Set up docker buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
