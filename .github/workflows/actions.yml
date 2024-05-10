@@ -14,7 +14,7 @@ jobs:
         run: |
           echo "OPENAI_KEY=$OPENAI_KEY" >> .env
         env: 
-          OPENAI_KEY: ${{secrets.OPENAI_KEY}}
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
 
       - name: Set up docker buildx
         id: buildx
