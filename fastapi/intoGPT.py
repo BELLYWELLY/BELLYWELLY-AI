@@ -56,4 +56,6 @@ def create_diet_recommendation_prompt(prompt):
     if answer is None or not isinstance(answer, str):
         raise ValueError("GPT API의 응답이 올바르지 않습니다.")
     
-    return [answer] 
+    formatted_answer = answer.replace("[식단 추천]", "\n[식단 추천]\n")
+
+    return [formatted_answer] 
