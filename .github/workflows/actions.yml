@@ -14,7 +14,7 @@ jobs:
         run: |
           cd ./fastapi
           touch ./.env
-          echo "${{ secrets.OPENAI_KEY }}" > ./.env   
+          echo "OPENAI_KEY=${{ secrets.OPENAI_KEY }}" > ./.env
 
       - name: Set up docker buildx
         id: buildx
