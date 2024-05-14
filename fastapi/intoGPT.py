@@ -8,7 +8,7 @@ load_dotenv()
 
 # openai-key 설정
 OPENAI_KEY = os.getenv('OPENAI_KEY')
-GPT_MODEL = "gpt-3.5-turbo"
+GPT_MODEL = "gpt-4-turbo"
 
 # 프롬프트 작성 
 def post_gpt(system_content, user_content, model_name):
