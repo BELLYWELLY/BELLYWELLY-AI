@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from ultralytics import YOLO
 from werkzeug.utils import secure_filename
 from pydantic import BaseModel
-from intoGPT import create_prediction_prompt, create_diet_recommendation_prompt
+from intoGPT import create_prediction_prompt, create_diet_recommendation_prompt, create_food_choice_prompt
 
 import os
 import requests
@@ -96,6 +96,25 @@ def recommend_diet(data: RequestFoodReport):
             "data": "An error occurred while processing the request."
         }
     return JSONResponse(content=response_data)
+
+@app.post("/choice")
+def choice_food(data: RequestFoodReport):
+    try:
+        if not data.content:
+            raise HTTPException(status_code=400, detail="Request content is empty")
+
+        content = create_food_choice_prompt(data.content)
+        response_data = {
+            "status": 200,
+            "data": content
+        }
+    except Exception as e:
+        response_data = {
+            "status": 500,
+            "data": "An error occurred while processing the request."
+        }
+    return JSONResponse(content=response_data)
+
 
 if __name__ == "__main__":
     import uvicorn
