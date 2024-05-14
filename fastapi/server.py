@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from ultralytics import YOLO
 from werkzeug.utils import secure_filename
+from typing import List
 from pydantic import BaseModel
 from intoGPT import create_prediction_prompt, create_diet_recommendation_prompt, create_food_choice_prompt
 
@@ -57,7 +58,7 @@ async def detect_objects(request: Request):
         raise HTTPException(status_code=500, detail=str(e))
 
 class RequestFoodReport(BaseModel):
-    content: str
+    content: List[str] 
 
 @app.post("/report-food")
 def create_food_report(data: RequestFoodReport):
