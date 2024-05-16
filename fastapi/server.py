@@ -60,7 +60,7 @@ async def detect_objects(request: Request):
 class RequestFoodReport(BaseModel):
     content: List[str] 
 
-@app.post("/report-food")
+@app.post("/report")
 def create_food_report(data: RequestFoodReport):
 
     try:
