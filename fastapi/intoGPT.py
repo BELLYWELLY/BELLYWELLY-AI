@@ -55,7 +55,9 @@ def get_default_diet_recommendation():
     langchain_prompt = (
         "Diet recommendation prompt: Based on general dietary guidelines for irritable bowel syndrome (IBS), recommend a balanced diet that includes one type of rice, one soup, one type of kimchi, and one side dish. Ensure the diet is low in high-FODMAP foods and promotes gastrointestinal health."
     )
-    return post_gpt(system_content, pre_prompt + langchain_prompt, GPT_MODEL)
+    answer = post_gpt(system_content, pre_prompt + langchain_prompt, GPT_MODEL)
+    
+    return [answer]
 
 def create_diet_recommendation_prompt(prompt):
     prompt_str = ", ".join(prompt) 
