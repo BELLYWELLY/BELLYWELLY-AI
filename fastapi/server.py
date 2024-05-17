@@ -3,9 +3,9 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from ultralytics import YOLO
 from werkzeug.utils import secure_filename
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
-from intoGPT import create_prediction_prompt, create_diet_recommendation_prompt, create_food_choice_prompt
+from intoGPT import create_prediction_prompt, create_diet_recommendation_prompt, create_food_choice_prompt, get_default_diet_recommendation
 
 import os
 import requests
@@ -60,6 +60,9 @@ async def detect_objects(request: Request):
 class RequestFoodReport(BaseModel):
     content: List[str] 
 
+class FoodPrompt(BaseModel):
+    content: Optional[List[str]]
+
 @app.post("/report")
 def create_food_report(data: RequestFoodReport):
 
@@ -81,22 +84,16 @@ def create_food_report(data: RequestFoodReport):
     return JSONResponse(content=response_data)
 
 @app.post("/recommend")
-def recommend_diet(data: RequestFoodReport): 
-    try:
-        if not data.content:
-            raise HTTPException(status_code=400, detail="Request content is empty")
-
-        content = create_diet_recommendation_prompt(data.content)
-        response_data = {
-            "status": 200,
-            "data": content
-        }
-    except Exception as e:
-        response_data = {
-            "status": 500,
-            "data": "An error occurred while processing the request."
-        }
-    return JSONResponse(content=response_data)
+async def recommend_food(prompt: FoodPrompt):
+    if prompt.content is None:
+        answer = get_default_diet_recommendation()
+    else:
+        try:
+            answer = create_diet_recommendation_prompt(prompt.content)
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
+    
+    return {"recommendation": answer}
 
 @app.post("/choice")
 def choice_food(data: RequestFoodReport):
