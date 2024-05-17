@@ -86,14 +86,19 @@ def create_food_report(data: RequestFoodReport):
 @app.post("/recommend")
 async def recommend_food(prompt: FoodPrompt):
     if prompt.content is None:
-        answer = get_default_diet_recommendation()
+        content = get_default_diet_recommendation()
     else:
         try:
-            answer = create_diet_recommendation_prompt(prompt.content)
+            content = create_diet_recommendation_prompt(prompt.content)
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
     
-    return {"recommendation": answer}
+    response_data = {
+        "status": 200,
+        "data": content
+    }
+    
+    return JSONResponse(content=response_data)
 
 @app.post("/choice")
 def choice_food(data: RequestFoodReport):
