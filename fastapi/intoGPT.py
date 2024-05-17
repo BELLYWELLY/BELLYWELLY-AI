@@ -51,7 +51,7 @@ def create_prediction_prompt(prompt):
 def get_default_diet_recommendation():
     # 기본 식단 추천 로직 추가
     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome (IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
-    pre_prompt = "한국어로 답변해줘; 일반적인 과민대장증후군(IBS)에 좋은 식단을 추천해줘; 밥, 국, 반찬, 과일을 하나씩 골라서 하나의 식단을 완성하여 추천해줘; 근거는 간단하게 1줄정도로만 친근감 있는 말투로 영양사가 조언해주는 것처럼 작성해줘.\n\n"
+    pre_prompt = "한국어로 답변해줘; 일반적인 과민대장증후군(IBS)에 좋은 식단을 추천해줘; 밥, 국, 반찬, 과일을 하나씩 골라서 하나의 식단을 완성하여 추천해줘; 근거는 간단하게 1줄로 영양사가 조언해주는 느낌으로 작성해줘.\n\n"
     langchain_prompt = (
         "Diet recommendation prompt: Based on general dietary guidelines for irritable bowel syndrome (IBS), recommend a balanced diet that includes one type of rice, one soup, one type of kimchi, and one side dish. Ensure the diet is low in high-FODMAP foods and promotes gastrointestinal health."
     )
@@ -60,7 +60,7 @@ def get_default_diet_recommendation():
 def create_diet_recommendation_prompt(prompt):
     prompt_str = ", ".join(prompt) 
     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome(IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
-    pre_prompt = "한국어로 답변해줘; 사용자가 일주일동안 다음과 같은 음식 리스트를 먹었는데, 이 음식 리스트를 기반으로 앞으로 사용자의 장건강 및 과민대장증후군을 개선해줄 수 있는 식단 하나를 추천해줘; 밥, 국, 반찬, 과일을 하나씩 골라서 하나의 식단을 완성하여 추천해줘; 근거는 간단하게 1줄정도로만 친근감 있는 말투로 영양사가 조언해주는 것처럼 작성해줘.\n\n"
+    pre_prompt = "한국어로 답변해줘; 사용자가 일주일동안 다음과 같은 음식 리스트를 먹었는데, 이 음식 리스트를 기반으로 앞으로 사용자의 장건강 및 과민대장증후군을 개선해줄 수 있는 식단 하나를 추천해줘; 밥, 국, 반찬, 과일을 하나씩 골라서 하나의 식단을 완성하여 추천해줘; 근거는 간단하게 1줄로 영양사가 조언해주는 느낌으로 작성해줘.\n\n"
     langchain_prompt = (
         "Diet recommendation prompt: Today's diet recommendation! After analyzing today's meals, it seems that {insert analysis of today's carbohydrate, protein, and sugar intake, e.g., 'the carbohydrate and sugar intake is high, while protein intake is insufficient.'} Additionally, {insert explanation whether the consumed foods are mainly high-FODMAP or low-FODMAP, e.g., 'there are many high-FODMAP foods consumed, indicating vulnerability to digestive health issues.'} Let me recommend a diet that can help improve your gastrointestinal health! [Diet Recommendation] {recommend a diet plan that can improve the user's digestive health and alleviate symptoms of irritable bowel syndrome (IBS); include one rice, one soup, one kimchi, and one side dish (e.g., 'barley rice, bean sprout soup, cabbage kimchi, stir-fried eggplant').}"
     )
