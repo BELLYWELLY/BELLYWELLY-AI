@@ -60,6 +60,9 @@ async def detect_objects(request: Request):
 class RequestFoodReport(BaseModel):
     content: List[str] 
 
+class RequestFoodReportRank(BaseModel):
+    food: List[str] 
+
 class FoodPrompt(BaseModel):
     content: Optional[List[str]]
 
@@ -122,7 +125,7 @@ def choice_food(data: RequestFoodReport):
     return JSONResponse(content=response_data)
 
 @app.post("/report/food")
-def report_food(data: RequestFoodReport):
+def report_food(data: RequestFoodReportRank):
     try:
         if not data.food:
             raise HTTPException(status_code=400, detail="Request food is empty")
@@ -150,10 +153,15 @@ def report_defecation(data: RequestDefecationReport):
             "status": 200,
             "data": content
         }
+    except ValueError as ve:
+        response_data = {
+            "status": 400,
+            "data": str(ve)
+        }
     except Exception as e:
         response_data = {
             "status": 500,
-            "data": "An error occurred while processing the request."
+            "data": f"An error occurred while processing the request: {str(e)}"
         }
     return JSONResponse(content=response_data)
 
