@@ -32,7 +32,7 @@ def post_gpt(system_content, user_content, model_name):
         print("gpt 답변: " + answer)
         return answer
     except Exception as e:
-        print(e)
+        print(f"Error in post_gpt: {e}")
         return None
     
 def create_prediction_prompt(prompt):
@@ -111,3 +111,5 @@ def create_defecation_report_prompt(defecation_scores: List[int]):
 
     if answer is None or not isinstance(answer, str):
         raise ValueError("GPT API의 응답이 올바르지 않습니다.")
+    
+    return answer
