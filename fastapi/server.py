@@ -5,7 +5,7 @@ from ultralytics import YOLO
 from werkzeug.utils import secure_filename
 from typing import List, Optional
 from pydantic import BaseModel
-from intoGPT import create_prediction_prompt, create_diet_recommendation_prompt, create_food_choice_prompt, get_default_diet_recommendation
+from intoGPT import create_prediction_prompt, create_diet_recommendation_prompt, create_food_choice_prompt, get_default_diet_recommendation, rank_foods_by_health
 
 import os
 import requests
@@ -118,6 +118,23 @@ def choice_food(data: RequestFoodReport):
         }
     return JSONResponse(content=response_data)
 
+@app.post("/report/food")
+def report_food(data: RequestFoodReport):
+    try:
+        if not data.content:
+            raise HTTPException(status_code=400, detail="Request content is empty")
+        
+        content = rank_foods_by_health(data.content)
+        response_data = {
+            "status": 200,
+            "data": content
+        }
+    except Exception as e:
+        response_data = {
+            "status": 500,
+            "data": "An error occurred while processing the request."
+        }
+    return JSONResponse(content=response_data)
 
 if __name__ == "__main__":
     import uvicorn

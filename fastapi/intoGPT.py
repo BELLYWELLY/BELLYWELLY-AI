@@ -88,3 +88,15 @@ def create_food_choice_prompt(prompt):
         raise ValueError("GPT API의 응답이 올바르지 않습니다.")
     
     return [answer]
+
+def rank_foods_by_health(prompt):
+    prompt_str = ", ".join(prompt)
+    system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome (IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
+    pre_prompt = "한국어로 답변해줘; 포드맵은 장에서 흡수되지 않고 쉽게 발효되어 설사, 복통, 복부팽만을 유발하는 올리고당, 이당류, 단당류, 폴리올을 일컫는 말입니다. 다음 음식 리스트를 바탕으로 장건강에 좋은 음식 5가지와 좋지 않은 음식 5가지를 순위별로 매겨주고, 각 음식이 왜 좋은지/좋지 않은지 간단하게 한 줄로 설명해줘. 만약 음식 리스트가 10개 미만이라면, 리스트의 절반만큼 Best와 Worst로 나누어 순위 매겨줘;\n\n"
+    langchain_prompt = "Food ranking prompt: Based on the provided list of foods, rank the top 5 foods that are best for digestive health and the top 5 foods that are worst for digestive health, considering their FODMAP content. Provide a brief explanation for why each food is good or bad for digestive health. If the list has fewer than 10 foods, rank half of them as best and the other half as worst;\n\n"
+    answer = post_gpt(system_content, pre_prompt + langchain_prompt + prompt_str, GPT_MODEL)
+
+    if answer is None or not isinstance(answer, str):
+        raise ValueError("GPT API의 응답이 올바르지 않습니다.")
+    
+    return [answer]
