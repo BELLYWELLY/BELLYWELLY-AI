@@ -102,8 +102,8 @@ def rank_foods_by_health(prompt):
     
     return [answer]
 
-def create_defecation_report_prompt(defecation_scores: List[int]):
-    prompt_str = ", ".join(map(str, defecation_scores))
+def create_defecation_report_prompt(prompt):
+    prompt_str = ", ".join(prompt)
     system_content = "You are the foremost expert in digestive health and gastrointestinal studies. Based on extensive research, you have attained the top position in the field."
     pre_prompt = "한국어로 답변해줘; 사용자의 일주일간 배변 점수를 보고 배변 점수에 대한 총평을 작성해줘. 배변 빈도와 배변 색깔, 배변 긴박감 및 배변 형태도 배변 점수에 유의미한 영향을 끼친다는 점을 고려하여 배변 점수가 장 건강을 개선하기 위해 어떤 신호를 나타내는지 설명해줘;\n\n"
     langchain_prompt = "Defecation report prompt: Based on the user's weekly defecation scores, provide a comprehensive evaluation of their defecation health. Consider factors such as defecation frequency and color, and explain how the scores indicate signals for improving gut health;\n\n"
@@ -111,4 +111,3 @@ def create_defecation_report_prompt(defecation_scores: List[int]):
 
     if answer is None or not isinstance(answer, str):
         raise ValueError("GPT API의 응답이 올바르지 않습니다.")
-    
