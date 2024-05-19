@@ -124,10 +124,10 @@ def choice_food(data: RequestFoodReport):
 @app.post("/report/food")
 def report_food(data: RequestFoodReport):
     try:
-        if not data.content:
-            raise HTTPException(status_code=400, detail="Request content is empty")
+        if not data.food:
+            raise HTTPException(status_code=400, detail="Request food is empty")
         
-        content = rank_foods_by_health(data.content)
+        content = rank_foods_by_health(data.food)
         response_data = {
             "status": 200,
             "data": content
