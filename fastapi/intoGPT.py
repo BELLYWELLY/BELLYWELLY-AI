@@ -3,7 +3,7 @@ import re
 
 from dotenv import load_dotenv
 from openai import OpenAI
-from typing import List
+from typing import List, Dict, Any
 
 load_dotenv()
 
@@ -90,7 +90,7 @@ def create_food_choice_prompt(prompt):
     
     return [answer]
 
-def rank_foods_by_health(prompt):
+def rank_foods_by_health(prompt: List[str]) -> Dict[str, Any]:
     prompt_str = ", ".join(prompt)
     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome (IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
     pre_prompt = "한국어로 답변해줘; 포드맵은 장에서 흡수되지 않고 쉽게 발효되어 설사, 복통, 복부팽만을 유발하는 올리고당, 이당류, 단당류, 폴리올을 일컫는 말입니다. 다음 음식 리스트를 바탕으로 장건강에 좋은 음식 5가지와 좋지 않은 음식 5가지를 순위별로 매겨주고, 각 음식이 왜 좋은지/좋지 않은지 간단하게 한 줄로 설명해줘. 만약 음식 리스트가 10개 미만이라면, 리스트의 절반만큼 Best와 Worst로 나누어 순위 매겨줘; 부연 설명 없이 순위와 음식 이름, 이에 대한 한 줄의 근거만 작성해줘; 강조 표현 없이 작성해줘; \n\n"
@@ -103,7 +103,7 @@ def rank_foods_by_health(prompt):
     return parse_gpt_response(answer)
 
 # GPT 응답을 파싱하는 함수
-def parse_gpt_response(response):
+def parse_gpt_response(response: str) -> Dict[str, Any]:
     best = []
     worst = []
     lines = response.split("\n")
