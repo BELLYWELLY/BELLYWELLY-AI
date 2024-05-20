@@ -49,6 +49,28 @@ def create_prediction_prompt(prompt):  # 레포트 - 음식/배변/스트레스 
     
     return [answer]
 
+def create_total_report(food: List[str], isLowFodmap: List[bool], defecation: List[int], stress: List[int]) -> str: # 레포트 - 음식/배변/스트레스 총평
+    system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome (IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
+    pre_prompt = "한국어로 답변해줘; 다음 음식 리스트는 사용자가 일주일동안 먹은 식단이고, 그 식단의 음식에 대한 저포드맵 여부, 배변 점수, 스트레스 점수를 기반으로 사용자 개인별로 장건강을 개선하기 위한 종합 보고서를 작성해줘. 강조 표현 없이 작성해줘;\n\n"
+    ex_prompt = "예시로는 다음과 같아; 식단 관리 측면에서는 미역국과 배추김치가 식이섬유와 유익균을 공급하여 장건강을 개선시킬 수 있습니다. 삼계탕과 불고기는 고단백 식품으로 에너지를 제공하지만 햄버거, 짜장면, 떡볶이 같은 고지방과 매운 음식은 소화에 부정적 영향을 끼칠 수 있어 주의가 필요합니다. 배변 점수 분석 결과 배변 빈도, 색깔, 긴박감, 형태를 고려할 때 50점 이하의 배변 점수는 규칙적인 배변 시간과 물 섭취 증가로 개선이 가능합니다. 스트레스 척도 분석을 통해 스트레스가 높을 때 배변 점수가 낮아지는 경향을 발견했으며 명상, 요가, 규칙적인 운동을 통해 스트레스 수준을 낮추는 것이 중요합니다. 이를 통해 과민대장증후군 개선과 전반적인 장건강 증진에 기여할 수 있습니다."
+    food_str = ", ".join([f"{f} (저포드맵: {isLowFodmap[i]})" for i, f in enumerate(food)])
+    defecation_str = ", ".join(map(str, defecation))
+    stress_str = ", ".join(map(str, stress))
+
+    user_content = (
+        f"음식 리스트: {food_str}\n"
+        f"배변 점수: {defecation_str}\n"
+        f"스트레스 점수: {stress_str}\n"
+        f"이 데이터를 기반으로 종합적인 보고서를 작성해줘."
+    )
+
+    answer = post_gpt(system_content, pre_prompt + ex_prompt + user_content, GPT_MODEL)
+
+    if answer is None or not isinstance(answer, str):
+        raise ValueError("GPT API의 응답이 올바르지 않습니다.")
+    
+    return answer
+
 def get_default_diet_recommendation(): # 채팅 - 기본 식단(default) 추천
     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome (IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
     pre_prompt = "한국어로 답변해줘; 일반적인 과민대장증후군(IBS)에 좋은 식단을 추천해줘; 밥, 국, 메인 반찬, 부가 반찬, 과일을 하나씩 골라서 하나의 식단을 완성하여 추천해줘; 근거는 간단하게 1줄로 영양사가 조언해주는 느낌으로 작성해줘; 강조 표현 없이 작성해줘;\n\n"

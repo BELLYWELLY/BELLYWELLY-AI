@@ -5,7 +5,7 @@ from ultralytics import YOLO
 from werkzeug.utils import secure_filename
 from typing import List, Optional
 from pydantic import BaseModel
-from intoGPT import create_prediction_prompt, create_diet_recommendation_prompt, create_food_choice_prompt, get_default_diet_recommendation, rank_foods_by_health, create_defecation_report_prompt, create_stress_report_prompt
+from intoGPT import create_total_report, create_diet_recommendation_prompt, create_food_choice_prompt, get_default_diet_recommendation, rank_foods_by_health, create_defecation_report_prompt, create_stress_report_prompt
 
 import os
 import requests
@@ -77,14 +77,12 @@ class RequestTotalReport(BaseModel):
     stress: List[int]
 
 @app.post("/report")
-def create_food_report(data: RequestFoodReport): # 레포트 - 음식/배변/스트레스 총평
-
+def report_total(data: RequestTotalReport): # 레포트 - 음식/배변/스트레스 총평
     try:
-        if not data.content:
-            raise HTTPException(status_code=400, detail="Request content is empty")
+        if not data.food or not data.isLowFodmap or not data.defecation or not data.stress:
+            raise HTTPException(status_code=400, detail="Request body is incomplete")
 
-        print(data.content)
-        content = create_prediction_prompt(data.content)
+        content = create_total_report(data.food, data.isLowFodmap, data.defecation, data.stress)
         response_data = {
             "status": 200,
             "data": content
