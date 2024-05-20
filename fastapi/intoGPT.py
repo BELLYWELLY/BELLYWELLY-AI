@@ -105,9 +105,8 @@ def rank_foods_by_health(prompt):
 def create_defecation_report_prompt(defecation_scores: List[int]):
     prompt_str = ", ".join(map(str, defecation_scores))
     system_content = "You are the foremost expert in digestive health and gastrointestinal studies. Based on extensive research, you have attained the top position in the field."
-    pre_prompt = "한국어로 답변해줘; 사용자의 일주일간 배변 점수를 보고 배변 점수에 대한 총평을 작성해줘. 배변 빈도와 배변 색깔, 배변 긴박감 및 배변 형태도 배변 점수에 유의미한 영향을 끼친다는 점을 고려하여 배변 점수가 장 건강을 개선하기 위해 어떤 신호를 나타내는지 설명해줘; 강조 표현 없이 작성해줘;\n\n"
-    langchain_prompt = "Defecation report prompt: Based on the user's weekly defecation scores, provide a comprehensive evaluation of their defecation health. Consider factors such as defecation frequency and color, and explain how the scores indicate signals for improving gut health;\n\n"
-    answer = post_gpt(system_content, pre_prompt + langchain_prompt + prompt_str, GPT_MODEL)
+    pre_prompt = "한국어로 답변해줘; 사용자의 일주일간 배변 점수를 보고 배변 점수에 대한 총평을 작성해줘; 사용자가 선택한 배변 빈도와 배변 색깔, 배변 긴박감 및 배변 형태도 배변 점수에 유의미한 영향을 끼친다는 점을 고려하여 배변 점수의 경향성을 중점적으로 반영하여 작성해줘; 모두에게 적용되는 너무 뻔한 내용 말고, 사용자의 점수를 보고 개인별로 도움이 될 수 있는 배변 조언을 해줘; 강조 표현 없이 작성해줘; 150자 정도로 핵심 위주로 작성해줘; \n\n"       
+    answer = post_gpt(system_content, pre_prompt + prompt_str, GPT_MODEL)
 
     if answer is None or not isinstance(answer, str):
         raise ValueError("GPT API의 응답이 올바르지 않습니다.")
