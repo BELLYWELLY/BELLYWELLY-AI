@@ -70,8 +70,14 @@ class RequestDefecationReport(BaseModel):
     defecation: List[int]
     stress: List[int]
 
+class RequestTotalReport(BaseModel):
+    food: List[str]
+    isLowFodmap: List[bool]
+    defecation: List[int]
+    stress: List[int]
+
 @app.post("/report")
-def create_food_report(data: RequestFoodReport):
+def create_food_report(data: RequestFoodReport): # 레포트 - 음식/배변/스트레스 총평
 
     try:
         if not data.content:
@@ -90,7 +96,7 @@ def create_food_report(data: RequestFoodReport):
         }
     return JSONResponse(content=response_data)
 
-@app.post("/recommend")
+@app.post("/recommend") # 채팅 - 식단 추천
 async def recommend_food(prompt: FoodPrompt):
     if prompt.content is None:
         content = get_default_diet_recommendation()
@@ -107,7 +113,7 @@ async def recommend_food(prompt: FoodPrompt):
     
     return JSONResponse(content=response_data)
 
-@app.post("/choice")
+@app.post("/choice") # 채팅 - 음식 고르기
 def choice_food(data: RequestFoodReport):
     try:
         if not data.content:
@@ -125,7 +131,7 @@ def choice_food(data: RequestFoodReport):
         }
     return JSONResponse(content=response_data)
 
-@app.post("/report/food")
+@app.post("/report/food") # 레포트 - 장건강 관련 음식 순위 매기기
 def report_food(data: RequestFoodReportRank):
     try:
         if not data.food:
@@ -143,7 +149,7 @@ def report_food(data: RequestFoodReportRank):
         }
     return JSONResponse(content=response_data)
 
-@app.post("/report/defecation")
+@app.post("/report/defecation") # 레포트 - 배변
 def report_defecation(data: RequestDefecationReport):
     try:
         if not data.defecation:
@@ -167,7 +173,7 @@ def report_defecation(data: RequestDefecationReport):
     return JSONResponse(content=response_data)
 
 @app.post("/report/stress")
-def report_stress(data: RequestDefecationReport):
+def report_stress(data: RequestDefecationReport): # 레포트 - 스트레스
     try:
         if not data.defecation:
             raise HTTPException(status_code=400, detail="Request defecation data is empty")
