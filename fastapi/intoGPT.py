@@ -51,8 +51,8 @@ def create_prediction_prompt(prompt):  # 레포트 - 음식/배변/스트레스 
 
 def create_total_report(food: List[str], isLowFodmap: List[bool], defecation: List[int], stress: List[int]) -> str: # 레포트 - 음식/배변/스트레스 총평
     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome (IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
-    pre_prompt = "한국어로 답변해줘; 다음 음식 리스트는 사용자가 일주일동안 먹은 식단이고, 그 식단의 음식에 대한 저포드맵 여부, 배변 점수, 스트레스 점수를 기반으로 사용자 개인별로 장건강을 개선하기 위한 종합 보고서를 작성해줘. 강조 표현 없이 작성해줘;\n\n"
-    ex_prompt = "예시로는 다음과 같아; 식단 관리 측면에서는 미역국과 배추김치가 식이섬유와 유익균을 공급하여 장건강을 개선시킬 수 있습니다. 삼계탕과 불고기는 고단백 식품으로 에너지를 제공하지만 햄버거, 짜장면, 떡볶이 같은 고지방과 매운 음식은 소화에 부정적 영향을 끼칠 수 있어 주의가 필요합니다. 배변 점수 분석 결과 배변 빈도, 색깔, 긴박감, 형태를 고려할 때 50점 이하의 배변 점수는 규칙적인 배변 시간과 물 섭취 증가로 개선이 가능합니다. 스트레스 척도 분석을 통해 스트레스가 높을 때 배변 점수가 낮아지는 경향을 발견했으며 명상, 요가, 규칙적인 운동을 통해 스트레스 수준을 낮추는 것이 중요합니다. 이를 통해 과민대장증후군 개선과 전반적인 장건강 증진에 기여할 수 있습니다."
+    pre_prompt = "한국어로 답변해줘; 다음 음식 리스트는 사용자가 일주일동안 먹은 식단이고, 그 식단의 음식에 대한 저포드맵 여부, 배변 점수, 스트레스 점수를 기반으로 사용자 개인별로 장건강을 개선하기 위한 종합 보고서를 작성해줘; 식단을 하나하나 분석하기 보다는 전반적인 식단과 배변, 스트레스의 연관성을 기반으로 작성해줘; ###이나 ****와 같은 굵게 표시하는 강조 표현 없이 작성해줘;\n\n"
+    ex_prompt = "예시로는 다음과 같아; 이번 주 식단의 경우에는 식이섬유와 유익균을 공급하여 장건강을 개선시킬 수 있는 음식을 섭취하였습니다. ~~과 ~~은 고단백 식품으로 에너지를 제공하지만 ~~, ~~와 같은 고지방과 매운 음식은 소화에 부정적 영향을 끼칠 수 있어 주의가 필요합니다. 배변 점수 분석 결과 배변 빈도, 색깔, 긴박감, 형태를 고려할 때 50점 이하의 배변 점수는 규칙적인 배변 시간과 물 섭취 증가로 개선이 가능합니다. 스트레스 척도 분석을 통해 스트레스가 높을 때 배변 점수가 낮아지는 경향을 발견했으며 명상, 요가, 규칙적인 운동을 통해 스트레스 수준을 낮추는 것이 중요합니다. 이를 통해 과민대장증후군 개선과 전반적인 장건강 증진에 기여할 수 있습니다."
     food_str = ", ".join([f"{f} (저포드맵: {isLowFodmap[i]})" for i, f in enumerate(food)])
     defecation_str = ", ".join(map(str, defecation))
     stress_str = ", ".join(map(str, stress))
