@@ -100,7 +100,32 @@ def rank_foods_by_health(prompt):
     if answer is None or not isinstance(answer, str):
         raise ValueError("GPT API의 응답이 올바르지 않습니다.")
     
-    return [answer]
+    return parse_gpt_response(answer)
+
+# GPT 응답을 파싱하는 함수
+def parse_gpt_response(response):
+    best = []
+    worst = []
+    lines = response.split("\n")
+
+    current_list = None
+    for line in lines:
+        line = line.strip()
+        if line.startswith("Best"):
+            current_list = best
+        elif line.startswith("Worst"):
+            current_list = worst
+        elif line and current_list is not None:
+            parts = line.split(":")
+            if len(parts) == 2:
+                name = parts[0].split(".")[1].strip()
+                desc = parts[1].strip()
+                current_list.append({"name": name, "desc": desc})
+    
+    return {
+        "best": best,
+        "worst": worst
+    }
 
 def create_defecation_report_prompt(defecation_scores: List[int]):
     prompt_str = ", ".join(map(str, defecation_scores))
