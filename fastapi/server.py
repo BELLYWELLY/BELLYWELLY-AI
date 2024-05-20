@@ -5,7 +5,7 @@ from ultralytics import YOLO
 from werkzeug.utils import secure_filename
 from typing import List, Optional
 from pydantic import BaseModel
-from intoGPT import create_prediction_prompt, create_diet_recommendation_prompt, create_food_choice_prompt, get_default_diet_recommendation, rank_foods_by_health, create_defecation_report_prompt
+from intoGPT import create_prediction_prompt, create_diet_recommendation_prompt, create_food_choice_prompt, get_default_diet_recommendation, rank_foods_by_health, create_defecation_report_prompt, create_stress_report_prompt
 
 import os
 import requests
@@ -68,6 +68,7 @@ class FoodPrompt(BaseModel):
 
 class RequestDefecationReport(BaseModel):
     defecation: List[int]
+    stress: List[int]
 
 @app.post("/report")
 def create_food_report(data: RequestFoodReport):
@@ -149,6 +150,31 @@ def report_defecation(data: RequestDefecationReport):
             raise HTTPException(status_code=400, detail="Request defecation data is empty")
 
         content = create_defecation_report_prompt(data.defecation)
+        response_data = {
+            "status": 200,
+            "data": content
+        }
+    except ValueError as ve:
+        response_data = {
+            "status": 400,
+            "data": str(ve)
+        }
+    except Exception as e:
+        response_data = {
+            "status": 500,
+            "data": f"An error occurred while processing the request: {str(e)}"
+        }
+    return JSONResponse(content=response_data)
+
+@app.post("/report/stress")
+def report_stress(data: RequestDefecationReport):
+    try:
+        if not data.defecation:
+            raise HTTPException(status_code=400, detail="Request defecation data is empty")
+        if not data.stress:
+            raise HTTPException(status_code=400, detail="Request stress data is empty")
+
+        content = create_stress_report_prompt(data.defecation, data.stress)
         response_data = {
             "status": 200,
             "data": content

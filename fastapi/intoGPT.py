@@ -137,3 +137,16 @@ def create_defecation_report_prompt(defecation_scores: List[int]):
         raise ValueError("GPT API의 응답이 올바르지 않습니다.")
     
     return answer
+
+def create_stress_report_prompt(defecation_scores: List[int], stress_scores: List[int]):
+    defecation_prompt_str = ", ".join(map(str, defecation_scores))
+    stress_prompt_str = ", ".join(map(str, stress_scores))
+    system_content = "You are the foremost expert in digestive health and stress management. Based on extensive research, you have attained the top position in these fields."
+    pre_prompt = "한국어로 답변해줘; 사용자의 일주일간 스트레스 점수를 보고 스트레스 점수에 대한 총평을 작성해줘. 또한, 장 건강과 스트레스의 관계를 설명하고, 장 건강 개선에 있어서 스트레스를 줄이는 것의 중요성에 대해서 조언해줘; 강조 표현 없이 작성해줘; 150자 정도로 핵심 위주로 작성해줘; \n\n"
+    combined_prompt = f"Defecation scores: {defecation_prompt_str}\nStress scores: {stress_prompt_str}"
+    answer = post_gpt(system_content, pre_prompt + combined_prompt, GPT_MODEL)
+
+    if answer is None or not isinstance(answer, str):
+        raise ValueError("GPT API의 응답이 올바르지 않습니다.")
+    
+    return answer
