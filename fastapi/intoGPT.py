@@ -38,7 +38,7 @@ def post_gpt(system_content, user_content, model_name):
 def create_prediction_prompt(prompt):  # 레포트 - 음식/배변/스트레스 총평
     prompt_str = ", ".join(prompt) 
     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome(IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies. "
-    pre_prompt = "한국어로 답변해줘; 해당 음식 리스트를 보고 장건강과 관련하여 사용자에게 장건강을 개선해주는 스트레스와 식단, 배변과의 연관성을 기반으로 장건강에 개선이 도움이 되는 조언을 담은 보고서를 작성해줘;강조 표현 없이 작성해줘;\n\n"
+    pre_prompt = "한국어로 답변해줘; 해당 음식 리스트를 보고 장건강과 관련하여 사용자에게 장건강을 개선해주는 스트레스와 식단, 배변과의 연관성을 기반으로 장건강에 개선이 도움이 되는 조언을 담은 보고서를 작성해줘; '****'와 같은 강조 표현 없이 작성해줘; 한국어 기준 500자 정도로 작성해줘; \n\n"
     langchain_prompt = (
         "Prediction prompt: Consider the provided food list and provide a dietary report focusing on improving the user's digestive health. Your response should be tailored to the user's gastrointestinal concerns, especially irritable bowel syndrome (IBS), and include recommendations based on your expertise in nutrition. Ensure the dietary plan is comprehensive and promotes gastrointestinal well-being. Additionally, analyze the consumed foods for their FODMAP content and provide personalized dietary recommendations to alleviate symptoms of IBS.}"
     )
