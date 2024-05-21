@@ -38,7 +38,7 @@ def post_gpt(system_content, user_content, model_name):
 def create_prediction_prompt(prompt):  # 레포트 - 음식/배변/스트레스 총평
     prompt_str = ", ".join(prompt) 
     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome(IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies. "
-    pre_prompt = "한국어로 답변해줘; 해당 음식 리스트를 보고 장건강과 관련하여 사용자에게 장건강을 개선해주는 스트레스와 식단, 배변과의 연관성을 기반으로 장건강에 개선이 도움이 되는 조언을 담은 보고서를 작성해줘; '****'와 같은 강조 표현 없이 작성해줘; 한국어 기준 500자 정도로 작성해줘; \n\n"
+    pre_prompt = "한국어로 답변해줘; 해당 음식 리스트를 보고 장건강과 관련하여 사용자에게 장건강을 개선해주는 스트레스와 식단, 배변과의 연관성을 기반으로 장건강에 개선이 도움이 되는 조언을 담은 보고서를 작성해줘; '****'와 같은 강조 표현 없이 작성해줘; 850byte 내로 작성해줘; \n\n"
     langchain_prompt = (
         "Prediction prompt: Consider the provided food list and provide a dietary report focusing on improving the user's digestive health. Your response should be tailored to the user's gastrointestinal concerns, especially irritable bowel syndrome (IBS), and include recommendations based on your expertise in nutrition. Ensure the dietary plan is comprehensive and promotes gastrointestinal well-being. Additionally, analyze the consumed foods for their FODMAP content and provide personalized dietary recommendations to alleviate symptoms of IBS.}"
     )
@@ -47,11 +47,11 @@ def create_prediction_prompt(prompt):  # 레포트 - 음식/배변/스트레스 
     if answer is None or not isinstance(answer, str):
         raise ValueError("GPT API의 응답이 올바르지 않습니다.")
     
-    return [answer]
+    return [answer] 
 
 def create_total_report(food: List[str], isLowFodmap: List[bool], defecation: List[int], stress: List[int]) -> str: # 레포트 - 음식/배변/스트레스 총평
     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome (IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
-    pre_prompt = "한국어로 답변해줘; 다음 음식 리스트는 사용자가 일주일동안 먹은 식단이고, 그 식단의 음식에 대한 저포드맵 여부, 배변 점수, 스트레스 점수를 기반으로 사용자 개인별로 장건강을 개선하기 위한 종합 보고서를 작성해줘; 식단을 하나하나 분석하기 보다는 전반적인 식단과 배변, 스트레스의 연관성을 기반으로 작성해줘; '###'이나 '****'와 같은 굵게 표시하는 강조 표현 없이 작성해줘; 한국어 기준 500자 정도로 작성해줘;\n\n"
+    pre_prompt = "한국어로 답변해줘; 다음 음식 리스트는 사용자가 일주일동안 먹은 식단이고, 그 식단의 음식에 대한 저포드맵 여부, 배변 점수, 스트레스 점수를 기반으로 사용자 개인별로 장건강을 개선하기 위한 종합 보고서를 작성해줘; 식단을 하나하나 분석하기 보다는 전반적인 식단과 배변, 스트레스의 연관성을 기반으로 작성해줘; '###'이나 '****'와 같은 굵게 표시하는 강조 표현 없이 작성해줘; 850byte 내로 작성해줘;\n\n"
     ex_prompt = "예시로는 다음과 같아; 이번 주 식단의 경우에는 식이섬유와 유익균을 공급하여 장건강을 개선시킬 수 있는 음식을 섭취하였습니다. ~~과 ~~은 고단백 식품으로 에너지를 제공하지만 ~~, ~~와 같은 고지방과 매운 음식은 소화에 부정적 영향을 끼칠 수 있어 주의가 필요합니다. 배변 점수 분석 결과 배변 빈도, 색깔, 긴박감, 형태를 고려할 때 50점 이하의 배변 점수는 규칙적인 배변 시간과 물 섭취 증가로 개선이 가능합니다. 스트레스 척도 분석을 통해 스트레스가 높을 때 배변 점수가 낮아지는 경향을 발견했으며 명상, 요가, 규칙적인 운동을 통해 스트레스 수준을 낮추는 것이 중요합니다. 이를 통해 과민대장증후군 개선과 전반적인 장건강 증진에 기여할 수 있습니다."
     food_str = ", ".join([f"{f} (저포드맵: {isLowFodmap[i]})" for i, f in enumerate(food)])
     defecation_str = ", ".join(map(str, defecation))
