@@ -74,10 +74,11 @@ def create_total_report(food: List[str], isLowFodmap: List[bool], defecation: Li
 def get_default_diet_recommendation(): # 채팅 - 기본 식단(default) 추천
     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome (IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
     pre_prompt = "한국어로 답변해줘; 일반적인 과민대장증후군(IBS)에 좋은 식단을 추천해줘; 밥, 국, 메인 메뉴(예를 들면, 고등어구이, 목살숙주볶음 등), 반찬(예를 들면, 시금치무침, 콩나물무침, 두부구이 등), 과일을 하나씩 골라서 하나의 식단을 완성하여 추천해줘; 근거는 간단하게 1줄로 영양사가 조언해주는 느낌으로 작성해줘; 강조 표현 없이 작성해줘; ';'표시 없이 깔끔하게 '음식: 설명' 이런식으로 작성해줘;\n\n"
+    ex_prompt = "예시로는 다음과 같아; 현미밥 - 식이섬유가 풍부하여 장 건강에 도움을 줍니다 \n 미소 된장국 - 소화를 돕는 성분이 포함되어있습니다 \n 닭가슴살 구이 - 저지방 고단백 식품으로 장에 부담이 적고 소화가 잘 됩니다 \n 시금치무침 - 저포드맵 성분으로 과민대장증후군 증상을 완화합니다 \n 바나나 - 저포드맵 과일로 포만감이 좋고 소화가 잘 됩니다."
     langchain_prompt = (
         "Diet recommendation prompt: Based on general dietary guidelines for irritable bowel syndrome (IBS), recommend a balanced diet that includes one type of rice, one soup, one type of kimchi, and one side dish. Ensure the diet is low in high-FODMAP foods and promotes gastrointestinal health."
     )
-    answer = post_gpt(system_content, pre_prompt + langchain_prompt, GPT_MODEL)
+    answer = post_gpt(system_content, pre_prompt + ex_prompt + langchain_prompt, GPT_MODEL)
     
     return [answer]
 
@@ -85,10 +86,11 @@ def create_diet_recommendation_prompt(prompt): # 채팅 - 식단 추천
     prompt_str = ", ".join(prompt) 
     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome(IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
     pre_prompt = "한국어로 답변해줘; 사용자가 일주일동안 다음과 같은 음식 리스트를 먹었는데, 이 음식 리스트를 기반으로 앞으로 사용자의 장건강 및 과민대장증후군을 개선해줄 수 있는 식단 하나를 추천해줘; 밥, 국, 메인 메뉴(예를 들면, 고등어구이, 목살숙주볶음 등), 반찬(예를 들면, 시금치무침, 콩나물무침, 두부구이 등), 과일을 하나씩 골라서 하나의 식단을 완성하여 추천해줘; 근거는 간단하게 1줄로 영양사가 조언해주는 느낌으로 작성해줘; 강조 표현 없이 작성해줘; ';'표시 없이 깔끔하게 '음식: 설명' 이런식으로 작성해줘;\n\n"
+    ex_prompt = "예시로는 다음과 같아; 현미밥 - 식이섬유가 풍부하여 장 건강에 도움을 줍니다 \n 미소 된장국 - 소화를 돕는 성분이 포함되어있습니다 \n 닭가슴살 구이 - 저지방 고단백 식품으로 장에 부담이 적고 소화가 잘 됩니다 \n 시금치무침 - 저포드맵 성분으로 과민대장증후군 증상을 완화합니다 \n 바나나 - 저포드맵 과일로 포만감이 좋고 소화가 잘 됩니다."
     langchain_prompt = (
         "Diet recommendation prompt: Today's diet recommendation! After analyzing today's meals, it seems that {insert analysis of today's carbohydrate, protein, and sugar intake, e.g., 'the carbohydrate and sugar intake is high, while protein intake is insufficient.'} Additionally, {insert explanation whether the consumed foods are mainly high-FODMAP or low-FODMAP, e.g., 'there are many high-FODMAP foods consumed, indicating vulnerability to digestive health issues.'} Let me recommend a diet that can help improve your gastrointestinal health! [Diet Recommendation] {recommend a diet plan that can improve the user's digestive health and alleviate symptoms of irritable bowel syndrome (IBS); include one rice, one soup, one kimchi, and one side dish (e.g., 'barley rice, bean sprout soup, cabbage kimchi, stir-fried eggplant').}"
     )
-    answer = post_gpt(system_content, pre_prompt + langchain_prompt + prompt_str, GPT_MODEL)
+    answer = post_gpt(system_content, pre_prompt + ex_prompt + langchain_prompt + prompt_str, GPT_MODEL)
 
     if answer is None or not isinstance(answer, str):
         raise ValueError("GPT API의 응답이 올바르지 않습니다.")
