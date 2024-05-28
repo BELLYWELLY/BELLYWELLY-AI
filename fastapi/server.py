@@ -61,7 +61,7 @@ class RequestFoodReport(BaseModel):
     content: List[str] 
 
 class RequestFoodReportRank(BaseModel):
-    food: List[str] 
+    content: List[str] 
 
 class FoodPrompt(BaseModel):
     content: Optional[List[str]]
@@ -71,7 +71,7 @@ class RequestDefecationReport(BaseModel):
     stress: List[int]
 
 class RequestTotalReport(BaseModel):
-    food: List[str]
+    content: List[str]
     isLowFodmap: List[bool]
     defecation: List[int]
     stress: List[int]
@@ -79,10 +79,10 @@ class RequestTotalReport(BaseModel):
 @app.post("/report")
 def report_total(data: RequestTotalReport): # 레포트 - 음식/배변/스트레스 총평
     try:
-        if not data.food or not data.isLowFodmap or not data.defecation or not data.stress:
+        if not data.content or not data.isLowFodmap or not data.defecation or not data.stress:
             raise HTTPException(status_code=400, detail="Request body is incomplete")
 
-        content = create_total_report(data.food, data.isLowFodmap, data.defecation, data.stress)
+        content = create_total_report(data.content, data.isLowFodmap, data.defecation, data.stress)
         response_data = {
             "status": 200,
             "data": content
