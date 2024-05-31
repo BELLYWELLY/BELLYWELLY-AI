@@ -24,46 +24,46 @@ system_prompt_template = PromptTemplate(
     template="system: {system_content}\nuser: {user_content}"
 )
 
-# # 프롬프트 작성 
-# def post_gpt(system_content, user_content, model_name):
-#     try:
-#         client = OpenAI(api_key=OPENAI_KEY)  # 클라이언트 인스턴스화
-#         # 'messages' 인자 구성
-#         messages = [
-#             {"role": "system", "content": system_content},
-#             {"role": "user", "content": user_content}
-#         ]
-#         # 새로운 인터페이스 사용
-#         completion = client.chat.completions.create(  # 클래스 이름 변경
-#             model=model_name,
-#             messages=messages,  # 여기에 'messages' 인자를 제공
-#             max_tokens=3000,
-#             temperature=0.5
-#             # 'stop' 인자는 필요에 따라 설정
-#         )
-#         answer = completion.choices[0].message.content.strip()
-#         print("gpt 답변: " + answer)
-#         return answer
-#     except Exception as e:
-#         print(f"Error in post_gpt: {e}")
-#         return None
-
-# LangChain을 사용하여 GPT 응답 생성
-def post_gpt(system_content: str, user_content: str, model_name: str):
+# 프롬프트 작성 
+def post_gpt(system_content, user_content, model_name):
     try:
-        chain = SequentialChain(
-            chains=[
-                LLMChain(llm=langchain_openai, prompt=system_prompt_template)
-            ],
-            input_variables=["system_content", "user_content"]
+        client = OpenAI(api_key=OPENAI_KEY)  # 클라이언트 인스턴스화
+        # 'messages' 인자 구성
+        messages = [
+            {"role": "system", "content": system_content},
+            {"role": "user", "content": user_content}
+        ]
+        # 새로운 인터페이스 사용
+        completion = client.chat.completions.create(  # 클래스 이름 변경
+            model=model_name,
+            messages=messages,  # 여기에 'messages' 인자를 제공
+            max_tokens=3000,
+            temperature=0.5
+            # 'stop' 인자는 필요에 따라 설정
         )
-        response = chain.run(system_content=system_content, user_content=user_content)
-        answer = response.strip()
+        answer = completion.choices[0].message.content.strip()
         print("gpt 답변: " + answer)
         return answer
     except Exception as e:
         print(f"Error in post_gpt: {e}")
         return None
+
+# # LangChain을 사용하여 GPT 응답 생성
+# def post_gpt(system_content: str, user_content: str, model_name: str):
+#     try:
+#         chain = SequentialChain(
+#             chains=[
+#                 LLMChain(llm=langchain_openai, prompt=system_prompt_template)
+#             ],
+#             input_variables=["system_content", "user_content"]
+#         )
+#         response = chain.run(system_content=system_content, user_content=user_content)
+#         answer = response.strip()
+#         print("gpt 답변: " + answer)
+#         return answer
+#     except Exception as e:
+#         print(f"Error in post_gpt: {e}")
+#         return None
     
 # def create_prediction_prompt(prompt):  # 레포트 - 음식/배변/스트레스 총평
 #     prompt_str = ", ".join(prompt) 
