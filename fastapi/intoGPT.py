@@ -4,6 +4,9 @@ import re
 from dotenv import load_dotenv
 from openai import OpenAI
 from typing import List, Dict, Any
+from langchain.chains import SequentialChain, LLMChain
+from langchain.prompts import PromptTemplate
+from langchain.llms import OpenAI as LangChainOpenAI
 
 load_dotenv()
 
@@ -11,24 +14,51 @@ load_dotenv()
 OPENAI_KEY = os.getenv('OPENAI_KEY')
 GPT_MODEL = "gpt-4o"
 
-# 프롬프트 작성 
-def post_gpt(system_content, user_content, model_name):
+# OpenAI 인스턴스화
+client = OpenAI(api_key=OPENAI_KEY)
+langchain_openai = LangChainOpenAI(api_key=OPENAI_KEY, model=GPT_MODEL)
+
+# 프롬프트 템플릿 작성
+system_prompt_template = PromptTemplate(
+    input_variables=["system_content", "user_content"],
+    template="system: {system_content}\nuser: {user_content}"
+)
+
+# # 프롬프트 작성 
+# def post_gpt(system_content, user_content, model_name):
+#     try:
+#         client = OpenAI(api_key=OPENAI_KEY)  # 클라이언트 인스턴스화
+#         # 'messages' 인자 구성
+#         messages = [
+#             {"role": "system", "content": system_content},
+#             {"role": "user", "content": user_content}
+#         ]
+#         # 새로운 인터페이스 사용
+#         completion = client.chat.completions.create(  # 클래스 이름 변경
+#             model=model_name,
+#             messages=messages,  # 여기에 'messages' 인자를 제공
+#             max_tokens=3000,
+#             temperature=0.5
+#             # 'stop' 인자는 필요에 따라 설정
+#         )
+#         answer = completion.choices[0].message.content.strip()
+#         print("gpt 답변: " + answer)
+#         return answer
+#     except Exception as e:
+#         print(f"Error in post_gpt: {e}")
+#         return None
+
+# LangChain을 사용하여 GPT 응답 생성
+def post_gpt(system_content: str, user_content: str, model_name: str):
     try:
-        client = OpenAI(api_key=OPENAI_KEY)  # 클라이언트 인스턴스화
-        # 'messages' 인자 구성
-        messages = [
-            {"role": "system", "content": system_content},
-            {"role": "user", "content": user_content}
-        ]
-        # 새로운 인터페이스 사용
-        completion = client.chat.completions.create(  # 클래스 이름 변경
-            model=model_name,
-            messages=messages,  # 여기에 'messages' 인자를 제공
-            max_tokens=3000,
-            temperature=0.5
-            # 'stop' 인자는 필요에 따라 설정
+        chain = SequentialChain(
+            chains=[
+                LLMChain(llm=langchain_openai, prompt=system_prompt_template)
+            ],
+            input_variables=["system_content", "user_content"]
         )
-        answer = completion.choices[0].message.content.strip()
+        response = chain.run(system_content=system_content, user_content=user_content)
+        answer = response.strip()
         print("gpt 답변: " + answer)
         return answer
     except Exception as e:
@@ -50,6 +80,29 @@ def post_gpt(system_content, user_content, model_name):
 #     return [answer] 
 
 def create_total_report(content: List[str], isLowFodmap: List[bool], defecation: List[int], stress: List[int]) -> str: # 레포트 - 음식/배변/스트레스 총평
+    system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome (IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
+    pre_prompt = "한국어로 답변해줘; 다음 음식 리스트는 사용자가 일주일동안 먹은 식단이고, 그 식단의 음식에 대한 저포드맵 여부, 배변 점수, 스트레스 점수를 기반으로 사용자 개인별로 장건강을 개선하기 위한 종합 보고서를 작성해줘; 식단을 하나하나 분석하기 보다는 전반적인 식단과 배변, 스트레스의 연관성을 기반으로 작성해줘; '###'이나 '****'와 같은 굵게 표시하는 강조 표현 없이 작성해줘; 850byte 내로 작성해줘;\n\n"
+    ex_prompt = "예시로는 다음과 같아; 이번 주 식단의 경우에는 식이섬유와 유익균을 공급하여 장건강을 개선시킬 수 있는 음식을 섭취하였습니다. ~~과 ~~은 고단백 식품으로 에너지를 제공하지만 ~~, ~~와 같은 고지방과 매운 음식은 소화에 부정적 영향을 끼칠 수 있어 주의가 필요합니다. 배변 점수 분석 결과 배변 빈도, 색깔, 긴박감, 형태를 고려할 때 50점 이하의 배변 점수는 규칙적인 배변 시간과 물 섭취 증가로 개선이 가능합니다. 스트레스 척도 분석을 통해 스트레스가 높을 때 배변 점수가 낮아지는 경향을 발견했으며 명상, 요가, 규칙적인 운동을 통해 스트레스 수준을 낮추는 것이 중요합니다. 이를 통해 과민대장증후군 개선과 전반적인 장건강 증진에 기여할 수 있습니다."
+    food_str = ", ".join([f"{f} (저포드맵: {isLowFodmap[i]})" for i, f in enumerate(content)])
+    defecation_str = ", ".join(map(str, defecation))
+    stress_str = ", ".join(map(str, stress))
+
+    user_content = (
+        f"음식 리스트: {food_str}\n"
+        f"배변 점수: {defecation_str}\n"
+        f"스트레스 점수: {stress_str}\n"
+        f"이 데이터를 기반으로 종합적인 보고서를 작성해줘."
+    )
+
+    answer = post_gpt(system_content, pre_prompt + ex_prompt + user_content, GPT_MODEL)
+
+    if answer is None or not isinstance(answer, str):
+        raise ValueError("GPT API의 응답이 올바르지 않습니다.")
+    
+    return answer
+
+# 종합 보고서 생성 함수
+def create_total_report(content: List[str], isLowFodmap: List[bool], defecation: List[int], stress: List[int]) -> str:
     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome (IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
     pre_prompt = "한국어로 답변해줘; 다음 음식 리스트는 사용자가 일주일동안 먹은 식단이고, 그 식단의 음식에 대한 저포드맵 여부, 배변 점수, 스트레스 점수를 기반으로 사용자 개인별로 장건강을 개선하기 위한 종합 보고서를 작성해줘; 식단을 하나하나 분석하기 보다는 전반적인 식단과 배변, 스트레스의 연관성을 기반으로 작성해줘; '###'이나 '****'와 같은 굵게 표시하는 강조 표현 없이 작성해줘; 850byte 내로 작성해줘;\n\n"
     ex_prompt = "예시로는 다음과 같아; 이번 주 식단의 경우에는 식이섬유와 유익균을 공급하여 장건강을 개선시킬 수 있는 음식을 섭취하였습니다. ~~과 ~~은 고단백 식품으로 에너지를 제공하지만 ~~, ~~와 같은 고지방과 매운 음식은 소화에 부정적 영향을 끼칠 수 있어 주의가 필요합니다. 배변 점수 분석 결과 배변 빈도, 색깔, 긴박감, 형태를 고려할 때 50점 이하의 배변 점수는 규칙적인 배변 시간과 물 섭취 증가로 개선이 가능합니다. 스트레스 척도 분석을 통해 스트레스가 높을 때 배변 점수가 낮아지는 경향을 발견했으며 명상, 요가, 규칙적인 운동을 통해 스트레스 수준을 낮추는 것이 중요합니다. 이를 통해 과민대장증후군 개선과 전반적인 장건강 증진에 기여할 수 있습니다."
