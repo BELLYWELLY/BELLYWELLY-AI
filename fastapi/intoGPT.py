@@ -4,9 +4,9 @@ import re
 from dotenv import load_dotenv
 from openai import OpenAI
 from typing import List, Dict, Any
-from langchain.chains import SequentialChain, LLMChain
-from langchain.prompts import PromptTemplate
-from langchain.llms import OpenAI as LangChainOpenAI
+# from langchain.chains import SequentialChain, LLMChain
+# from langchain.prompts import PromptTemplate
+# from langchain.llms import OpenAI as LangChainOpenAI
 
 load_dotenv()
 
@@ -14,15 +14,15 @@ load_dotenv()
 OPENAI_KEY = os.getenv('OPENAI_KEY')
 GPT_MODEL = "gpt-4o"
 
-# OpenAI 인스턴스화
-client = OpenAI(api_key=OPENAI_KEY)
-langchain_openai = LangChainOpenAI(api_key=OPENAI_KEY, model=GPT_MODEL)
+# # OpenAI 인스턴스화
+# client = OpenAI(api_key=OPENAI_KEY)
+# langchain_openai = LangChainOpenAI(api_key=OPENAI_KEY, model=GPT_MODEL)
 
-# 프롬프트 템플릿 작성
-system_prompt_template = PromptTemplate(
-    input_variables=["system_content", "user_content"],
-    template="system: {system_content}\nuser: {user_content}"
-)
+# # 프롬프트 템플릿 작성
+# system_prompt_template = PromptTemplate(
+#     input_variables=["system_content", "user_content"],
+#     template="system: {system_content}\nuser: {user_content}"
+# )
 
 # 프롬프트 작성 
 def post_gpt(system_content, user_content, model_name):
