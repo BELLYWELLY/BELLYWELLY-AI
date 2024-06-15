@@ -171,7 +171,8 @@ def rank_foods_by_health(prompt: List[str]) -> Dict[str, Any]: # 레포트 - 장
     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome (IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
     pre_prompt = "한국어로 답변해줘; 포드맵은 장에서 흡수되지 않고 쉽게 발효되어 설사, 복통, 복부팽만을 유발하는 올리고당, 이당류, 단당류, 폴리올을 일컫는 말입니다. 다음 음식 리스트를 바탕으로 장건강에 좋은 음식 5가지와 좋지 않은 음식 5가지를 순위별로 매겨주고, 각 음식이 왜 좋은지/좋지 않은지 간단하게 한 줄로 설명해줘. 만약 음식 리스트가 10개 미만이라면, 리스트의 절반만큼 Best와 Worst로 나누어 순위 매겨줘; 부연 설명 없이 순위와 음식 이름, 이에 대한 한 줄의 근거만 작성해줘; 강조 표현 없이 작성해줘; \n\n"
     langchain_prompt = "Food ranking prompt: Based on the provided list of foods, rank the top 5 foods that are best for digestive health and the top 5 foods that are worst for digestive health, considering their FODMAP content. Provide a brief explanation for why each food is good or bad for digestive health. If the list has fewer than 10 foods, rank half of them as best and the other half as worst;\n\n"
-    answer = post_gpt(system_content, pre_prompt + langchain_prompt + prompt_str, GPT_MODEL)
+    ex_prompt = "Best:\n1. 바나나: 바나나는 저포드맵 음식으로, 과민대장증후군에 도움이 됩니다.\n2. 브로콜리: 브로콜리는 식이섬유가 풍부하여 장 건강에 유익합니다.\n3. 양배추: 양배추는 장을 진정시키고 염증을 줄이는 데 도움이 됩니다.\n4. 아몬드: 아몬드는 건강한 지방과 단백질이 많아 장 건강에 좋습니다.\n5. 사과: 사과는 섬유질이 풍부하여 소화를 돕습니다.\n\nWorst:\n1. 빵: 빵은 고포드맵 음식으로 장에 부담을 줄 수 있습니다.\n2. 우유: 우유는 유당을 포함하여 장에서 발효될 수 있습니다.\n3. 마늘: 마늘은 고포드맵 음식으로 과민대장증후군에 악영향을 미칠 수 있습니다."
+    answer = post_gpt(system_content, pre_prompt + langchain_prompt + ex_prompt + prompt_str, GPT_MODEL)
 
     if answer is None or not isinstance(answer, str):
         raise ValueError("GPT API의 응답이 올바르지 않습니다.")
