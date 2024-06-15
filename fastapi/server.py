@@ -143,7 +143,7 @@ def report_food(data: RequestFoodReportRank):
     except Exception as e:
         response_data = {
             "status": 500,
-            "data": "An error occurred while processing the request."
+            "data": f"An error occurred while processing the request: {str(e)}"
         }
     return JSONResponse(content=response_data)
 

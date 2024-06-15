@@ -177,7 +177,11 @@ def rank_foods_by_health(prompt: List[str]) -> Dict[str, Any]: # 레포트 - 장
     if answer is None or not isinstance(answer, str):
         raise ValueError("GPT API의 응답이 올바르지 않습니다.")
     
-    return parse_gpt_response(answer)
+    print("GPT 응답:", answer)  # GPT 응답 출력
+    parsed_response = parse_gpt_response(answer)
+    print("파싱된 응답:", parsed_response)  # 파싱된 응답 출력
+    
+    return parsed_response
 
 # GPT 응답을 파싱하는 함수
 def parse_gpt_response(response: str) -> Dict[str, Any]:
