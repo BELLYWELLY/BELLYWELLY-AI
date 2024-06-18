@@ -132,10 +132,10 @@ def choice_food(data: RequestFoodReport):
 @app.post("/report/food") # 레포트 - 장건강 관련 음식 순위 매기기
 def report_food(data: RequestFoodReportRank):
     try:
-        if not data.food:
+        if not data.content:
             raise HTTPException(status_code=400, detail="Request food is empty")
         
-        content = rank_foods_by_health(data.food)
+        content = rank_foods_by_health(data.content)
         response_data = {
             "status": 200,
             "data": content
