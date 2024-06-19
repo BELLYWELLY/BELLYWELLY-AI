@@ -4,25 +4,12 @@ import re
 from dotenv import load_dotenv
 from openai import OpenAI
 from typing import List, Dict, Any
-# from langchain.chains import SequentialChain, LLMChain
-# from langchain.prompts import PromptTemplate
-# from langchain.llms import OpenAI as LangChainOpenAI
 
 load_dotenv()
 
 # openai-key 설정
 OPENAI_KEY = os.getenv('OPENAI_KEY')
 GPT_MODEL = "gpt-4o"
-
-# # OpenAI 인스턴스화
-# client = OpenAI(api_key=OPENAI_KEY)
-# langchain_openai = LangChainOpenAI(api_key=OPENAI_KEY, model=GPT_MODEL)
-
-# # 프롬프트 템플릿 작성
-# system_prompt_template = PromptTemplate(
-#     input_variables=["system_content", "user_content"],
-#     template="system: {system_content}\nuser: {user_content}"
-# )
 
 # 프롬프트 작성 
 def post_gpt(system_content, user_content, model_name):
@@ -48,37 +35,7 @@ def post_gpt(system_content, user_content, model_name):
         print(f"Error in post_gpt: {e}")
         return None
 
-# # LangChain을 사용하여 GPT 응답 생성
-# def post_gpt(system_content: str, user_content: str, model_name: str):
-#     try:
-#         chain = SequentialChain(
-#             chains=[
-#                 LLMChain(llm=langchain_openai, prompt=system_prompt_template)
-#             ],
-#             input_variables=["system_content", "user_content"]
-#         )
-#         response = chain.run(system_content=system_content, user_content=user_content)
-#         answer = response.strip()
-#         print("gpt 답변: " + answer)
-#         return answer
-#     except Exception as e:
-#         print(f"Error in post_gpt: {e}")
-#         return None
-    
-# def create_prediction_prompt(prompt):  # 레포트 - 음식/배변/스트레스 총평
-#     prompt_str = ", ".join(prompt) 
-#     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome(IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies. "
-#     pre_prompt = "한국어로 답변해줘; 해당 음식 리스트를 보고 장건강과 관련하여 사용자에게 장건강을 개선해주는 스트레스와 식단, 배변과의 연관성을 기반으로 장건강에 개선이 도움이 되는 조언을 담은 보고서를 작성해줘; '****'와 같은 강조 표현 없이 작성해줘; 850byte 내로 작성해줘; \n\n"
-#     langchain_prompt = (
-#         "Prediction prompt: Consider the provided food list and provide a dietary report focusing on improving the user's digestive health. Your response should be tailored to the user's gastrointestinal concerns, especially irritable bowel syndrome (IBS), and include recommendations based on your expertise in nutrition. Ensure the dietary plan is comprehensive and promotes gastrointestinal well-being. Additionally, analyze the consumed foods for their FODMAP content and provide personalized dietary recommendations to alleviate symptoms of IBS.}"
-#     )
-#     answer = post_gpt(system_content, pre_prompt + langchain_prompt + prompt_str, GPT_MODEL)
-
-#     if answer is None or not isinstance(answer, str):
-#         raise ValueError("GPT API의 응답이 올바르지 않습니다.")
-    
-#     return [answer] 
-
+# 종합 보고서 생성 함수
 def create_total_report(content: List[str], isLowFodmap: List[bool], defecation: List[int], stress: List[int]) -> str: # 레포트 - 음식/배변/스트레스 총평
     system_content = "You are the foremost expert in nutrition on the planet, particularly in the field of irritable bowel syndrome (IBS), through relentless research, you've attained the top position in the realm of gastrointestinal studies."
     pre_prompt = "한국어로 답변해줘; 다음 음식 리스트는 사용자가 일주일동안 먹은 식단이고, 그 식단의 음식에 대한 저포드맵 여부, 배변 점수, 스트레스 점수를 기반으로 사용자 개인별로 장건강을 개선하기 위한 종합 보고서를 작성해줘; 식단을 하나하나 분석하기 보다는 전반적인 식단과 배변, 스트레스의 연관성을 기반으로 작성해줘; '###'이나 '****'와 같은 굵게 표시하는 강조 표현 없이 작성해줘; 850byte 내로 작성해줘;\n\n"
