@@ -71,16 +71,22 @@ git clone https://github.com/BellyWelly/BellyWelly-AI.git
 cd BellyWelly-AI
 ```
 
-**(2) Docker 이미지 필드 및 컨테이너 실행** 
+**(2) 필요한 Python 패키지 설치** 
+BellyWelly 프로젝트를 실행하기 위해서는 requirement.txt 파일에 명시된 패키지를 설치해야 합니다. 
+```
+pip install -r requirements.txt
+```
+
+**(3) Docker 이미지 필드 및 컨테이너 실행** 
 ```
 docker build -t bellywelly-ai .
 docker run --gpus all -p 8000:8000 bellywelly-ai
 ```
 
-**(3) URL을 통한 서버 접근**  
+**(4) URL을 통한 서버 접근**  
 배포된 서비스 URL 주소: https://model.bellywelly.kro.kr/detection
 
-**(4) 샘플 데이터를 이용하여 Request 요청**  
+**(5) 샘플 데이터를 이용하여 Request 요청**  
 샘플 데이터는 프로젝트 폴더 내 `test_image 디렉토리`에 포함되어 있습니다.
 다음과 같은 JSON 데이터를 https://model.bellywelly.kro.kr/detection 엔드포인트에 POST 요청으로 보냅니다.
 ```json
