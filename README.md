@@ -25,10 +25,8 @@ AI 시스템은 **FastAPI**를 사용하여, 텐센트 클라우드에서 학습
 - OpenCV(Open Source Computer Vision Library)는 실시간 컴퓨터 비전을 위한 라이브러리로 객체 탐지 작업을 수행함
 - OpenAI는 GPT 모델과 상호작용할 수 있는 라이브러리로 프롬프트 생성 및 관련 로직을 포함
 - pydantic는 데이터 검증 및 설정을 위한 데이터 클래스 라이브러리로 데이터 검증 및 스키마 정의에 사용함
-<br>
 
 ## 📁 프로젝트 폴더 구조
-
 ```
 📂 BellyWelly-AI
     └── BellyWelly-AI
@@ -44,7 +42,6 @@ AI 시스템은 **FastAPI**를 사용하여, 텐센트 클라우드에서 학습
         ├── Dockerfile
         └── test_image 
 ```
-<br>
 
 ## 🔧 객체 탐지 모델 구현  
 ### 개발 환경 셋업 
@@ -91,7 +88,6 @@ docker run --gpus all -p 8000:8000 bellywelly-ai
     "imageUrl": "https://m.62life.com/images/gdimg/p_1(411).jpg"
 }
 ```
-<br>
 
 ## 📊 YOLOv8 모델 성능 평가
 
