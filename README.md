@@ -72,6 +72,7 @@ cd BellyWelly-AI
 ```
 
 **(2) 필요한 Python 패키지 설치** 
+
 BellyWelly 프로젝트를 실행하기 위해서는 requirement.txt 파일에 명시된 패키지를 설치해야 합니다. 
 ```
 pip install -r requirements.txt
