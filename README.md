@@ -11,7 +11,7 @@
 <br>
 
 ## ⚙️ 서비스 아키텍쳐 
-![image](https://github.com/BellyWelly/BellyWelly-AI/assets/96541582/263faceb-897e-4ebd-b394-9af55a8fb736)
+![image](https://github.com/BellyWelly/BellyWelly-BE/assets/121334671/58a2a335-9a7c-4eb5-a5c9-a601b28b601e)
 
 AI 시스템은 **FastAPI**를 사용하여, 텐센트 클라우드에서 학습한 **YOLOv8** 모델과 **OpenAI API**를 서빙하며 이 시스템은 Docker 환경에서 실행됨. **OpenAI API**는 **CoT(Chain of Thought) 전략**과 **LangChain** 기술을 적용하여, LLM(Large Language Model)에 Query와 Prompt를 전달하고, LLM의 응답을 받음
 <br>
