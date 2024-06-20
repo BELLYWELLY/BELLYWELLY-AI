@@ -90,7 +90,7 @@ def get_default_diet_recommendation(): # 채팅 - 기본 식단(default) 추천
     )
     answer = post_gpt(system_content, pre_prompt + ex_prompt + langchain_prompt, GPT_MODEL)
     
-    return [answer]
+    return answer
 
 def create_diet_recommendation_prompt(prompt): # 채팅 - 식단 추천
     prompt_str = ", ".join(prompt) 
@@ -107,7 +107,7 @@ def create_diet_recommendation_prompt(prompt): # 채팅 - 식단 추천
     
     formatted_answer = answer.replace("[식단 추천]", "\n[식단 추천]\n")
 
-    return [formatted_answer] 
+    return formatted_answer
 
 def create_food_choice_prompt(prompt): # 채팅 - 음식 고르기
     prompt_str = ", ".join(prompt) 
